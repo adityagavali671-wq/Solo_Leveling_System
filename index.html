@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d1b">
+  <title>THE SYSTEM — Real-Life Leveling</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="The System home">
+      <span class="brand-mark">S</span>
+      <span>THE <b>SYSTEM</b><small>REAL-LIFE LEVELING PROTOCOL</small></span>
+    </a>
+    <div class="top-actions">
+      <span class="save-indicator"><i></i> SAVED LOCALLY</span>
+      <button class="icon-button" id="exportBtn" title="Export a backup" aria-label="Export backup">↓</button>
+      <button class="icon-button" id="importBtn" title="Import a backup" aria-label="Import backup">↑</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="welcome-row">
+      <div>
+        <p class="eyebrow">PLAYER STATUS // <span id="todayLabel">TODAY</span></p>
+        <h1>Welcome back, <span id="playerNameHeading">PLAYER</span><span class="title-dot">.</span></h1>
+        <p class="muted">No shortcuts. Complete quests. Earn your progress.</p>
+      </div>
+      <button class="secondary-button" id="editProfileBtn">✎ Edit profile</button>
+    </section>
+
+    <section class="hero-grid">
+      <article class="panel player-panel">
+        <div class="panel-topline"><span class="eyebrow">PLAYER PROFILE</span><span class="rank-chip" id="rankChip">E-RANK</span></div>
+        <div class="player-main">
+          <div class="avatar" id="avatar"><span id="avatarInitial">P</span><div class="avatar-ring"></div></div>
+          <div class="player-copy">
+            <h2 id="playerNameCard">PLAYER</h2>
+            <p class="muted" id="playerClass">The Relentless Learner</p>
+            <div class="level-line"><span>LEVEL</span><strong id="levelValue">1</strong><span class="level-xp" id="xpText">0 / 100 XP</span></div>
+            <div class="progress-track"><div class="progress-fill" id="levelProgress"></div></div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div><span>TOTAL XP</span><strong id="totalXp">0</strong></div>
+          <div><span>QUESTS CLEARED</span><strong id="questsCleared">0</strong></div>
+          <div><span>BEST STREAK</span><strong id="bestStreak">0 <small>days</small></strong></div>
+        </div>
+      </article>
+      <article class="panel quote-panel">
+        <div class="system-symbol">⌁</div>
+        <p class="eyebrow">SYSTEM MESSAGE</p>
+        <h2 id="systemMessage">Your journey begins with one completed quest.</h2>
+        <p class="muted">Consistency beats intensity. Recovery is part of progression.</p>
+        <div class="message-footer"><span class="pulse-dot"></span> SYSTEM ONLINE</div>
+      </article>
+    </section>
+
+    <section class="section-heading">
+      <div><p class="eyebrow">CORE PARAMETERS</p><h2>Attributes</h2></div>
+      <span class="section-note">Improve through real-world practice</span>
+    </section>
+    <section class="attributes-grid" id="attributesGrid"></section>
+
+    <section class="content-grid">
+      <section class="panel quests-panel">
+        <div class="section-heading inside">
+          <div><p class="eyebrow">DAILY MISSIONS</p><h2>Quest board</h2></div>
+          <span class="counter-pill" id="questCounter">0 / 0</span>
+        </div>
+        <div class="quest-filters">
+          <button class="filter active" data-filter="all">All quests</button>
+          <button class="filter" data-filter="open">Active</button>
+          <button class="filter" data-filter="done">Cleared</button>
+        </div>
+        <div id="questList" class="quest-list"></div>
+        <button class="add-quest-button" id="addQuestBtn"><span>＋</span> Create custom quest</button>
+      </section>
+
+      <aside class="right-column">
+        <section class="panel streak-panel">
+          <div class="section-heading inside">
+            <div><p class="eyebrow">CONSISTENCY LOG</p><h2>Streaks</h2></div><span class="streak-flame">✦</span>
+          </div>
+          <div class="streak-number"><strong id="currentStreak">0</strong><span>DAY STREAK</span></div>
+          <div class="week-strip" id="weekStrip"></div>
+          <p class="muted small">A day counts when you clear at least one quest. Missed days don't erase your progress or your worth—restart whenever you're ready.</p>
+        </section>
+        <section class="panel achievements-panel">
+          <div class="section-heading inside">
+            <div><p class="eyebrow">MILESTONES</p><h2>Achievements</h2></div><span class="counter-pill" id="achievementCounter">0 / 0</span>
+          </div>
+          <div id="achievementList" class="achievement-list"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="section-heading inside">
+        <div><p class="eyebrow">RECENT ACTIVITY</p><h2>Quest history</h2></div>
+        <button class="text-button" id="clearHistoryBtn">Clear history</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <footer class="footer">
+      <span>THE SYSTEM v1.0</span><span>Your data stays in this browser on this device.</span>
+      <button class="text-button danger-text" id="resetBtn">Reset all progress</button>
+    </footer>
+  </main>
+
+  <dialog id="profileDialog" class="modal">
+    <form id="profileForm" method="dialog">
+      <div class="modal-heading"><div><p class="eyebrow">PLAYER CONFIGURATION</p><h2>Edit profile</h2></div><button type="button" class="close-button" data-close="profileDialog">×</button></div>
+      <label>Player name<input id="nameInput" maxlength="24" required placeholder="Enter your player name"></label>
+      <label>Player class<input id="classInput" maxlength="48" placeholder="The Relentless Learner"></label>
+      <p class="muted small">This only changes your display name and class. Your progress remains intact.</p>
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="profileDialog">Cancel</button><button class="primary-button" type="submit">Save profile</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="questDialog" class="modal">
+    <form id="questForm" method="dialog">
+      <div class="modal-heading"><div><p class="eyebrow">MISSION BUILDER</p><h2>Create a quest</h2></div><button type="button" class="close-button" data-close="questDialog">×</button></div>
+      <label>Quest title<input id="questTitleInput" maxlength="90" required placeholder="e.g. Revise one science topic"></label>
+      <div class="form-row">
+        <label>Attribute
+          <select id="questAttribute">
+            <option value="INT">INT — Intelligence</option><option value="STR">STR — Strength</option><option value="AGI">AGI — Agility</option><option value="WIL">WIL — Willpower</option><option value="VIT">VIT — Vitality</option>
+          </select>
+        </label>
+        <label>XP reward
+          <select id="questXp"><option value="10">10 XP — Easy</option><option value="15" selected>15 XP — Normal</option><option value="25">25 XP — Challenging</option><option value="40">40 XP — Major</option></select>
+        </label>
+      </div>
+      <p class="muted small">Choose a realistic task you can complete today. Custom quests can be deleted from the quest card.</p>
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="questDialog">Cancel</button><button class="primary-button" type="submit">Add quest</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="modal">
+    <form id="confirmForm" method="dialog">
+      <div class="modal-heading"><div><p class="eyebrow">CONFIRM ACTION</p><h2 id="confirmTitle">Are you sure?</h2></div><button type="button" class="close-button" data-close="confirmDialog">×</button></div>
+      <p id="confirmText" class="muted"></p>
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="confirmDialog">Cancel</button><button class="primary-button" id="confirmActionBtn" type="submit">Confirm</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
